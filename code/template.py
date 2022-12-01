@@ -11,7 +11,6 @@ def part2(input_file):
 
 
 def main() -> None:
-    input_file = ''
     if len(sys.argv) > 2:
         input_file = sys.argv[2]
     else:

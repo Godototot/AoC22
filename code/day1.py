@@ -27,7 +27,6 @@ def part2(input_file):
 
 
 def main() -> None:
-    input_file = ''
     if len(sys.argv) > 2:
         input_file = sys.argv[2]
     else:
@@ -37,7 +36,7 @@ def main() -> None:
     elif sys.argv[1] == '2':
         print(part2(input_file))
     else:
-        raise Exception("Please clarify, which part you wanna execute.")
+        raise Exception("Part not clarified.")
 
 
 if __name__ == '__main__':
