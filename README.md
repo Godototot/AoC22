@@ -1,6 +1,6 @@
 # AoC22
 My Advent of Code 2022 solutions.\
-Current Stars: **2**
+Current Stars: **4**
 
 ## Files
 1.  **Input** includes the input for each day, called 'day<X>.txt'
