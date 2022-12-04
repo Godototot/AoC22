@@ -7,19 +7,19 @@ def prepare_input(input_file):
     ass_list = []
     for i in range(len(pairs)):
         ass_list.append([ass.split('-') for ass in pairs[i]])
-        for j in range(len(ass_list[i])):
-            ass_list[i][j] = [int(elem) for elem in ass_list[i][j]]
     return ass_list
 
 
 def part1(ass_list):
     counter = 0
     for assignment in ass_list:
-        if assignment[0][0] == assignment[1][0] or assignment[0][1] == assignment[1][1]:
+        lb = [int(assignment[0][0]), int(assignment[1][0])]
+        ub = [int(assignment[0][1]), int(assignment[1][1])]
+        if lb[0] == lb[1] or ub[0] == ub[1]:
             counter += 1
-        elif assignment[0][0] <= assignment[1][0] and assignment[0][1] >= assignment[1][1]:
+        elif lb[0] < lb[1] and ub[0] > ub[1]:
             counter += 1
-        elif assignment[0][0] >= assignment[1][0] and assignment[0][1] <= assignment[1][1]:
+        elif lb[0] > lb[1] and ub[0] < ub[1]:
             counter += 1
     return counter
 
@@ -27,11 +27,13 @@ def part1(ass_list):
 def part2(ass_list):
     counter = 0
     for assignment in ass_list:
-        if assignment[0][0] == assignment[1][0] or assignment[0][1] == assignment[1][1]:
+        lb = [int(assignment[0][0]), int(assignment[1][0])]
+        ub = [int(assignment[0][1]), int(assignment[1][1])]
+        if lb[0] == lb[1] or ub[0] == ub[1]:
             counter += 1
-        elif assignment[0][0] <= assignment[1][0] <= assignment[0][1]:
+        elif lb[0] <= ub[0] <= ub[1]:
             counter += 1
-        elif assignment[1][0] <= assignment[0][0] <= assignment[1][1]:
+        elif lb[1] <= lb[0] <= ub[1]:
             counter += 1
     return counter
 
