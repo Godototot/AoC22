@@ -7,15 +7,13 @@ def prepare_input(input_file):
 
 
 def find_package(signal, p_len):
-    marker = ''
-    for i in range(len(signal)):
-        index = marker.find(signal[i])
-        if index == -1:
-            marker += signal[i]
-            if len(marker) == p_len:
-                return i + 1
-        else:
-            marker = marker[index + 1:] + signal[i]
+    marker_lb = 0
+    for marker_ub in range(len(signal)):
+        index = signal.find(signal[marker_ub], marker_lb, marker_ub)
+        if index != -1:
+            marker_lb = index+1
+        elif marker_ub+1 - marker_lb >= p_len:
+            return marker_ub+1
     return -1
 
 
