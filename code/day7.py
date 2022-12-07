@@ -4,44 +4,39 @@ from helperfunc import *
 
 class Dir:
     def __init__(self, outer_dir, name):
-        self._outer_dir = outer_dir
-        self._name = name
+        self.outer_dir = outer_dir
+        self.name = name
         self._dir_list = []
         self._files = []
+        self.size = 0
 
-    def get_name(self):
-        return self._name
-
-    def get_out(self):
-        return self._outer_dir
-
-    def get_dir(self):
+    def get_inner_dir(self):
         return self._dir_list
 
     def add_dir(self, name):
-        if not any(d.get_name() == name for d in self._dir_list):
+        if not any(d.name == name for d in self._dir_list):
             self._dir_list.append(Dir(self, name))
 
     def add_file(self, name, size):
         if not any(f[0] == name for f in self._files):
             self._files.append((name, size))
+        self.increase_size(size)
+
+    def increase_size(self, file_size):
+        self.size += file_size
+        if self.outer_dir:
+            self.outer_dir.increase_size(file_size)
 
     def move(self, next_dir):
-        n = next((d for d in self._dir_list if d.get_name() == next_dir), False)
+        n = next((d for d in self._dir_list if d.name == next_dir), False)
         if n is False:
             raise Exception("Directory \'"+next_dir+"\' does not exist")
         return n
 
-    def get_size(self):
-        size = 0
-        size += sum(d.get_size() for d in self._dir_list)
-        size += sum(f[1] for f in self._files)
-        return size
-
     def get_size_under(self, bar):
         res = sum(d.get_size_under(bar) for d in self._dir_list)
-        if self.get_size() <= bar:
-            res += self.get_size()
+        if self.size <= bar:
+            res += self.size
         return res
 
     def __str__(self):
@@ -49,7 +44,7 @@ class Dir:
 
     def str_helper(self, depth):
         pre = "  "*depth
-        out = pre+"> "+self._name+' ('+str(self.get_size())+')\n'
+        out = pre+"> "+self.name+'\n'
         for d in self._dir_list:
             out += d.str_helper(depth+1)
         for f in self._files:
@@ -66,7 +61,7 @@ def prepare_input(input_file):
         if l[0] == '$':
             if 'cd' in l:
                 if l_split[2] == '..':
-                    current_dir = current_dir.get_out()
+                    current_dir = current_dir.outer_dir
                 elif l_split[2] == '/':
                     current_dir = root
                 else:
@@ -84,8 +79,8 @@ def part1(root):
 
 def find_smallest_dir_bigger_n(r_d, size, n):
     smallest = size
-    for d in r_d.get_dir():
-        new_size = d.get_size()
+    for d in r_d.get_inner_dir():
+        new_size = d.size
         if n < new_size:
             new_small = find_smallest_dir_bigger_n(d, new_size, n)
             if new_small < smallest:
@@ -94,7 +89,7 @@ def find_smallest_dir_bigger_n(r_d, size, n):
 
 
 def part2(root):
-    root_size = root.get_size()
+    root_size = root.size
     needed_space = 30000000 - (70000000-root_size)
     return find_smallest_dir_bigger_n(root, root_size, needed_space)
 
