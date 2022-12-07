@@ -15,6 +15,9 @@ class Dir:
     def get_out(self):
         return self._outer_dir
 
+    def get_dir(self):
+        return self._dir_list
+
     def add_dir(self, name):
         if not any(d.get_name() == name for d in self._dir_list):
             self._dir_list.append(Dir(self, name))
@@ -79,9 +82,21 @@ def part1(root):
     return root.get_size_under(100000)
 
 
+def find_smallest_dir_bigger_n(r_d, size, n):
+    smallest = size
+    for d in r_d.get_dir():
+        new_size = d.get_size()
+        if n < new_size:
+            new_small = find_smallest_dir_bigger_n(d, new_size, n)
+            if new_small < smallest:
+                smallest = new_small
+    return smallest
+
+
 def part2(root):
-    needed_space = 30000000 - root.get_size()
-    return ''
+    root_size = root.get_size()
+    needed_space = 30000000 - (70000000-root_size)
+    return find_smallest_dir_bigger_n(root, root_size, needed_space)
 
 
 def main() -> None:
