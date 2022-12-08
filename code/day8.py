@@ -27,6 +27,19 @@ def part1(forrest):
     return get_coverage(forrest).sum()
 
 
+def get_blocker(trees, height, rev=False):
+    if not rev:
+        for i in range(0, len(trees)):
+            if trees[i] >= height:
+                return i
+        return len(trees)-1
+    else:
+        for i in range(len(trees)-1, -1, -1):
+            if trees[i] >= height:
+                return i
+        return 0
+
+
 def part2(forrest):
     max_scenic = 0
     counter_1 = 0
@@ -37,38 +50,29 @@ def part2(forrest):
             scenic_score = 1
             remaining_max = j*(forrest.shape[0]-j-1)*i*(forrest.shape[0]-i-1)
             # get left trees
-            blocked = np.where(forrest[i, 0:j] >= forrest[i, j])[0]
-            if blocked.size != 0:
-                scenic_score *= j-blocked.max()
-            else:
-                scenic_score *= j
-            remaining_max /= j
+            blocked = get_blocker(forrest[i, 0:j], forrest[i, j], True)
+            scenic_score *= j-blocked
+
             # get right trees
+            remaining_max /= j
             if scenic_score * remaining_max > max_scenic:
                 counter_1 += 1
-                blocked = np.where(forrest[i, j+1:] >= forrest[i, j])[0]
-                if blocked.size != 0:
-                    scenic_score *= blocked.min()+1
-                else:
-                    scenic_score *= forrest.shape[0]-j-1
+                blocked = get_blocker(forrest[i, j+1:], forrest[i, j])
+                scenic_score *= blocked+1
                 remaining_max = i*(forrest.shape[0]-i-1)
+
                 # get trees above
                 if scenic_score * remaining_max > max_scenic:
                     counter_2 += 1
-                    blocked = np.where(forrest[0:i, j] >= forrest[i, j])[0]
-                    if blocked.size != 0:
-                        scenic_score *= i - blocked.max()
-                    else:
-                        scenic_score *= i
+                    blocked = get_blocker(forrest[0:i, j], forrest[i, j], True)
+                    scenic_score *= i-blocked
                     remaining_max /= i
+
                     # get trees below
                     if scenic_score * remaining_max > max_scenic:
                         counter_3 += 1
-                        blocked = np.where(forrest[i+1:, j] >= forrest[i, j])[0]
-                        if blocked.size != 0:
-                            scenic_score *= blocked.min() + 1
-                        else:
-                            scenic_score *= forrest.shape[0] - i - 1
+                        blocked = get_blocker(forrest[i+1:, j], forrest[i, j])
+                        scenic_score *= blocked+1
                         max_scenic = max(max_scenic, scenic_score)
     print('All: ', pow(forrest.shape[0]-2, 2))
     print('Calculated second side: ', counter_1)
