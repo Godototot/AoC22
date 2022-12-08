@@ -1,5 +1,7 @@
 import sys
 import numpy as np
+from matplotlib import pyplot as plt
+from matplotlib import colors
 from helperfunc import *
 
 
@@ -32,8 +34,19 @@ def get_coverage(forrest):
     return visibility
 
 
+def plot_visibility(coverage):
+    """ Plots given Coverage as a binary two-dimensional pixel-map """
+
+    pixel_plot = plt.figure()
+    cmap = colors.ListedColormap(['Black', 'Green'])
+    pixel_plot = plt.imshow(coverage, cmap=cmap)
+    plt.show()
+
+
 def part1(forrest):
-    return get_coverage(forrest).sum()
+    cov = get_coverage(forrest)
+    plot_visibility(cov)
+    return cov.sum()
 
 
 def get_blocker(trees, height, rev=False):
