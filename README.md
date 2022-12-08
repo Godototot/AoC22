@@ -4,8 +4,9 @@
 My Advent of Code 2022 solutions.
 
 ## Files
-1.  **Input** includes the input for each day, called 'day<X>.txt'
-2.  **Code** includes:\
+1.  **input** includes the input for each day, called 'day<X>.txt'
+2.  **plots** includes all plots created by the code
+3.  **code** includes:\
   The Code for both parts of each day in the same file, called 'day<X>.py' \
   A file containing helper functions that might be useful for multiple days 'helperfunc.py' \
   A template file to use for future code files

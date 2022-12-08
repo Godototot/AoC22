@@ -37,10 +37,10 @@ def get_coverage(forrest):
 def plot_visibility(coverage):
     """ Plots given Coverage as a binary two-dimensional pixel-map """
 
-    pixel_plot = plt.figure()
     cmap = colors.ListedColormap(['Black', 'Green'])
-    pixel_plot = plt.imshow(coverage, cmap=cmap)
-    plt.show()
+    plt.imshow(coverage, cmap=cmap)
+    plt.axis('off')
+    plt.savefig('../plots/day8_tree_visibility.png')
 
 
 def part1(forrest):
