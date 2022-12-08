@@ -27,8 +27,54 @@ def part1(forrest):
     return get_coverage(forrest).sum()
 
 
-def part2(input_data):
-    return ''
+def part2(forrest):
+    max_scenic = 0
+    counter_1 = 0
+    counter_2 = 0
+    counter_3 = 0
+    for i in range(1, forrest.shape[0]-1):
+        for j in range(1, forrest.shape[0]-1):
+            scenic_score = 1
+            remaining_max = j*(forrest.shape[0]-j-1)*i*(forrest.shape[0]-i-1)
+            # get left trees
+            blocked = np.where(forrest[i, 0:j] >= forrest[i, j])[0]
+            if blocked.size != 0:
+                scenic_score *= j-blocked.max()
+            else:
+                scenic_score *= j
+            remaining_max /= j
+            # get right trees
+            if scenic_score * remaining_max > max_scenic:
+                counter_1 += 1
+                blocked = np.where(forrest[i, j+1:] >= forrest[i, j])[0]
+                if blocked.size != 0:
+                    scenic_score *= blocked.min()+1
+                else:
+                    scenic_score *= forrest.shape[0]-j-1
+                remaining_max = i*(forrest.shape[0]-i-1)
+                # get trees above
+                if scenic_score * remaining_max > max_scenic:
+                    counter_2 += 1
+                    blocked = np.where(forrest[0:i, j] >= forrest[i, j])[0]
+                    if blocked.size != 0:
+                        scenic_score *= i - blocked.max()
+                    else:
+                        scenic_score *= i
+                    remaining_max /= i
+                    # get trees below
+                    if scenic_score * remaining_max > max_scenic:
+                        counter_3 += 1
+                        blocked = np.where(forrest[i+1:, j] >= forrest[i, j])[0]
+                        if blocked.size != 0:
+                            scenic_score *= blocked.min() + 1
+                        else:
+                            scenic_score *= forrest.shape[0] - i - 1
+                        max_scenic = max(max_scenic, scenic_score)
+    print('All: ', pow(forrest.shape[0]-2, 2))
+    print('Calculated second side: ', counter_1)
+    print('Calculated third side: ', counter_2)
+    print('Calculated all sides: ', counter_3)
+    return max_scenic
 
 
 def main() -> None:
