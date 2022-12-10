@@ -4,6 +4,7 @@ from collections import deque
 
 
 def prepare_input(input_file):
+    """ Turns input into list of tuple, consisting of number of cycles and value for how much x is moved """
     lines = read_input_lines(input_file)
     operations = deque()
     for l in reversed(lines):
@@ -11,6 +12,7 @@ def prepare_input(input_file):
         if sp[0] == 'addx':
             operations.append((2, int(sp[1])))
         elif sp[0] == 'noop':
+            # noop can be interpreted as an operation that moves x by 0 and takes only one cycle
             operations.append((1, 0))
     return operations
 
@@ -32,8 +34,25 @@ def part1(operations):
     return signal_sum
 
 
-def part2(input_data):
-    return ''
+def part2(operations):
+    clock = 1
+    signal_sum = 0
+    x = 1
+    current_op = 0
+    timer = 0
+    crt = ''
+    while len(operations) > 0:
+        if timer == 0:
+            x += current_op
+            timer, current_op = operations.pop()
+        if clock % 40 == 20:
+            signal_sum += clock * x
+
+        crt += '.' if abs(x-(clock % 40-1)) > 1 else '#'
+        timer -= 1
+        clock += 1
+    crt_screen = [crt[i:i+40] for i in range(0, len(crt), 40)]
+    return '\n'.join(crt_screen)
 
 
 def main() -> None:
