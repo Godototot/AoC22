@@ -1,6 +1,7 @@
 import sys
 from helperfunc import *
 from collections import deque
+from matplotlib import pyplot as plt
 
 
 def prepare_input(input_file):
@@ -34,13 +35,19 @@ def part1(operations):
     return signal_sum
 
 
+def plot_crt_screen(crt):
+    plt.imshow(crt, cmap='Greys')
+    plt.axis('Off')
+    plt.savefig('../plots/day10_part2.png')
+
+
 def part2(operations):
     clock = 1
     signal_sum = 0
     x = 1
     current_op = 0
     timer = 0
-    crt = ''
+    crt = []
     while len(operations) > 0:
         if timer == 0:
             x += current_op
@@ -48,11 +55,12 @@ def part2(operations):
         if clock % 40 == 20:
             signal_sum += clock * x
 
-        crt += '.' if abs(x-(clock % 40-1)) > 1 else '#'
+        crt += [0] if abs(x-(clock % 40-1)) > 1 else [1]
         timer -= 1
         clock += 1
     crt_screen = [crt[i:i+40] for i in range(0, len(crt), 40)]
-    return '\n'.join(crt_screen)
+    plot_crt_screen(crt_screen)
+    return 'Solution plotted.'
 
 
 def main() -> None:
