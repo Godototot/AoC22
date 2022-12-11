@@ -7,22 +7,22 @@ from helperfunc import *
 class Monkey:
     def __init__(self, items, operation, test):
         self.items = items
-        #self.newitems = []
         self.operation = operation
         self.test = test
         self.nr_of_inspections = 0
 
     def take_item(self, item):
-        #self.newitems.append(item)
-        self.items = [item] + self.items
+        self.items.append(item)
 
-    #def swap_hands(self):
-    #    self.items = self.newitems
-    #    self.newitems = []
-
-    def inspect_items(self):
+    def lower_worry_levels(self, threshold):
         for i in range(len(self.items)):
-            self.items[i] = math.trunc(interpret_op(self.operation, self.items[i])/3)
+            self.items[i] = self.items[i] % threshold
+
+    def inspect_items(self, sinking_worry_level=True):
+        for i in range(len(self.items)):
+            self.items[i] = interpret_op(self.operation, self.items[i])
+            if sinking_worry_level:
+                self.items[i] = math.trunc(self.items[i]/3)
             self.nr_of_inspections += 1
 
     def throw_items(self, monkey_list):
@@ -55,15 +55,21 @@ def part1(monkeys):
         for m in range(len(monkeys)):
             monkeys[m].inspect_items()
             monkeys[m].throw_items(monkeys)
-        #for m in range(len(monkeys)):
-        #    monkeys[m].swap_hands()
     inspections = [m.nr_of_inspections for m in monkeys]
     inspections.sort(reverse=True)
     return inspections[0]*inspections[1]
 
 
-def part2(input_data):
-    return ''
+def part2(monkeys):
+    threshold = math.prod([m.test[0] for m in monkeys])
+    for i in range(10000):
+        for m in range(len(monkeys)):
+            monkeys[m].lower_worry_levels(threshold)
+            monkeys[m].inspect_items(False)
+            monkeys[m].throw_items(monkeys)
+    inspections = [m.nr_of_inspections for m in monkeys]
+    inspections.sort(reverse=True)
+    return inspections[0]*inspections[1]
 
 
 def main() -> None:
