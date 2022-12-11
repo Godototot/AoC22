@@ -55,7 +55,7 @@ def part2(operations):
         if clock % 40 == 20:
             signal_sum += clock * x
 
-        crt += [0] if abs(x-(clock % 40-1)) > 1 else [1]
+        crt += [0] if abs(x-((clock-1) % 40)) > 1 else [1]
         timer -= 1
         clock += 1
     crt_screen = [crt[i:i+40] for i in range(0, len(crt), 40)]
