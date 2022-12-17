@@ -1,3 +1,4 @@
+import copy
 import sys
 import re
 from collections import deque
@@ -54,12 +55,53 @@ def recursive_calc_pressure(start, valve_list, time):
     return start_pressure_release+max(pressure)
 
 
+# def recursive_calc_pressure_with_elephant(me, elephant, valve_list, time):
+#     if time < min(me[1], elephant[1]):
+#         return 0
+#     if me[1] <= elephant[1]:
+#         elephant[1] -= me[1]
+#         time -= me[1]
+#         me[1] = 0
+#         pressure_release = me[0].flow_rate*time
+#         if len(valve_list) == 0 or time <= 0:
+#             if elephant[1] != 0:
+#                 return pressure_release
+#             else:
+#                 return pressure_release+elephant[0].flow_rate*time
+#         pressure = []
+#         for c in valve_list:
+#             remaining_valve_list = {v: valve_list[v] for v in valve_list if v != c}
+#             pressure.append(recursive_calc_pressure_with_elephant([valve_list[c], me[0].paths[c]+1], copy.deepcopy(elephant), remaining_valve_list, time))
+#         if sum(pressure) == 0:
+#             return pressure_release
+#         return pressure_release+max(pressure)
+#     else:
+#         me[1] -= elephant[1]
+#         time -= elephant[1]
+#         elephant[1] = 0
+#         pressure_release = elephant[0].flow_rate * time
+#         if len(valve_list) == 0 or time <= 0:
+#             if me[1] != 0:
+#                 return pressure_release
+#             else:
+#                 return pressure_release + me[0].flow_rate * time
+#         pressure = []
+#         for c in valve_list:
+#             remaining_valve_list = {v: valve_list[v] for v in valve_list if v != c}
+#             pressure.append(recursive_calc_pressure_with_elephant(copy.deepcopy(me), [valve_list[c], elephant[0].paths[c]+1], remaining_valve_list, time))
+#         if sum(pressure) == 0:
+#             return pressure_release
+#         return pressure_release + max(pressure)
+
+
 def part1(valve_list):
     cleaned_valve_list = {v: valve_list[v] for v in valve_list if valve_list[v].flow_rate > 0}
     return recursive_calc_pressure(valve_list['AA'], cleaned_valve_list, 30)
 
 
-def part2(input_data):
+def part2(valve_list):
+    # cleaned_valve_list = {v: valve_list[v] for v in valve_list if valve_list[v].flow_rate > 0}
+    # return recursive_calc_pressure_with_elephant([valve_list['AA'], 0], [valve_list['AA'], 0], cleaned_valve_list, 26)
     return ''
 
 
