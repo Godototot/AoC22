@@ -9,7 +9,6 @@ def read_input_lines(file_name):
 
 def add_tuple(a, b):
     """ add each element of two tuples of same length"""
-
     if len(a) != len(b):
         raise Exception("Tuples are of different lengths")
     return tuple(a[i]+b[i] for i in range(len(a)))
