@@ -8,7 +8,15 @@ def read_input_lines(file_name):
 
 
 def add_tuple(a, b):
-    """ add each element of two tuples of same length"""
+    """Adds each element of two tuples of same length."""
     if len(a) != len(b):
         raise Exception("Tuples are of different lengths")
     return tuple(a[i]+b[i] for i in range(len(a)))
+
+
+def alt_module(i, length):
+    """Alternative version of modulo that stops does not wrap negative values up into positive."""
+    if i < 0:
+        return (i % length)-length
+    else:
+        return i % length
